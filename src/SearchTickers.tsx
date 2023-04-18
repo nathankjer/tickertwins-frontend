@@ -12,7 +12,7 @@ interface TickerType {
 }
 
 async function fetchTickers(query: string): Promise<TickerType[]> {
-  const response = await fetch(`https://tickertwins-backend-vct4oolaqq-ue.a.run.app/tickers?q=${query}`);
+  const response = await fetch(`https://api.tickertwins.com/tickers?q=${query}`);
   const data: TickerType[] = await response.json();
   return data;
 }
