@@ -28,7 +28,7 @@ export default function Symbol({ symbol }: SymbolProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`http://localhost:8080/tickers/${symbol}/similar`);
+      const response = await fetch(`${process.env.HOST}/tickers/${symbol}/similar`);
       const result: ApiResponse = await response.json();
       setData(result);
     };

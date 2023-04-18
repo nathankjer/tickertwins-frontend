@@ -5,8 +5,6 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router'
 
-const API_BASE_URL = 'http://localhost:8080';
-
 interface TickerType {
   symbol: string;
   name: string;
@@ -14,7 +12,7 @@ interface TickerType {
 }
 
 async function fetchTickers(query: string): Promise<TickerType[]> {
-  const response = await fetch(`${API_BASE_URL}/tickers?q=${query}`);
+  const response = await fetch(`${process.env.HOST}/tickers?q=${query}`);
   const data: TickerType[] = await response.json();
   return data;
 }
