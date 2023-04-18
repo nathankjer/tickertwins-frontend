@@ -28,7 +28,7 @@ export default function Symbol({ symbol }: SymbolProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`https://api.tickertwins.com/tickers/${symbol}/similar`);
+      const response = await fetch(`https://tickertwins-backend-vct4oolaqq-ue.a.run.app/tickers/${symbol}/similar`);
       const result: ApiResponse = await response.json();
       setData(result);
     };
