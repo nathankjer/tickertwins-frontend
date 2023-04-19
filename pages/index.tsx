@@ -52,7 +52,7 @@ export default function Home() {
       </Typography>
       <Box mt={2}>
         <SearchTicker />
-      </Box>
+      </Box><br/>
       <Typography
         variant="subtitle1"
         component="p"
