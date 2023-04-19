@@ -66,7 +66,7 @@ export default function Symbol({ symbol }: SymbolProps) {
         {data.ticker.description}
       </Typography><br/>
       <Typography variant="h5" component="h2">
-        Tickers with Similar Descriptions:
+        Tickers with similar descriptions
       </Typography>
       <FormControlLabel
         control={<Checkbox checked={showETFs} onChange={e => setShowETFs(e.target.checked)} />}
