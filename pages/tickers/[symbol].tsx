@@ -3,6 +3,8 @@ import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, Tab
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { TablePagination } from '@mui/material';
+
 
 interface SymbolProps {
   symbol: string;
@@ -24,6 +26,8 @@ interface ApiResponse {
 export default function Symbol({ symbol }: SymbolProps) {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [showETFs, setShowETFs] = useState(true);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const router = useRouter();
 
   useEffect(() => {
@@ -42,6 +46,15 @@ export default function Symbol({ symbol }: SymbolProps) {
   const filteredSimilarTickers = showETFs
     ? data.similar_tickers
     : data.similar_tickers.filter(ticker => ticker.type !== 'ETF');
+
+  const handleChangePage = (_event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+    
+  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };    
 
   return (
     <>
@@ -63,7 +76,9 @@ export default function Symbol({ symbol }: SymbolProps) {
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredSimilarTickers.map((ticker, index) => (
+            {filteredSimilarTickers
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((ticker, index) => (
               <TableRow key={ticker.symbol}>
                 <TableCell>{index + 1}</TableCell> {/* Add new column for row number */}
                 <TableCell>
@@ -77,6 +92,15 @@ export default function Symbol({ symbol }: SymbolProps) {
           </TableBody>
         </Table>
       </TableContainer>
+      <TablePagination
+        rowsPerPageOptions={[10, 25, 50]}
+        component="div"
+        count={filteredSimilarTickers.length}
+        rowsPerPage={rowsPerPage}
+        page={page}
+        onPageChange={handleChangePage}
+        onRowsPerPageChange={handleChangeRowsPerPage}
+      />
     </>
   );
 }
