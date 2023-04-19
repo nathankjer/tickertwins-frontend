@@ -63,7 +63,7 @@ export default function MyApp(props: MyAppProps) {
                 alignItems: 'center',
               }}
             >
-              <Card sx={{ width: '100%', maxWidth: 800, padding: isMobile ? '2em' : '5em' }}>
+              <Card sx={{ width: '100%', maxWidth: 800, padding: '2em' }}>
                 <CardContent>
                   <Component {...pageProps} />
                 </CardContent>
