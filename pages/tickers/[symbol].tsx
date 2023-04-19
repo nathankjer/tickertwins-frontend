@@ -4,6 +4,7 @@ import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { TablePagination } from '@mui/material';
+import TruncatedText from '../../src/TruncatedText';
 
 
 interface SymbolProps {
@@ -62,9 +63,7 @@ export default function Symbol({ symbol }: SymbolProps) {
       <Typography variant="h4" component="h1">
         {data.ticker.name} ({data.ticker.symbol})
       </Typography><br/>
-      <Typography paragraph={true}>
-        {data.ticker.description}
-      </Typography><br/>
+      <TruncatedText text={data.ticker.description} maxLength={100} /><br/>
       <Typography variant="h5" component="h2">
         Tickers with similar descriptions
       </Typography>
