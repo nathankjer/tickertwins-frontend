@@ -3,6 +3,7 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { useRouter } from 'next/router'
 
 interface TickerType {
@@ -16,19 +17,18 @@ async function fetchTickers(query: string): Promise<TickerType[]> {
   const data: TickerType[] = await response.json();
   return data;
 }
-  
 
 function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (...args: Parameters<T>) => Promise<ReturnType<T>> {
-    let timeout: ReturnType<typeof setTimeout> | null = null;
-    return function (...args: Parameters<T>): Promise<ReturnType<T>> {
-      return new Promise((resolve) => {
-        if (timeout) {
-          clearTimeout(timeout);
-        }
-        timeout = setTimeout(() => resolve(func(...args)), wait);
-      });
-    };
-  }  
+  let timeout: ReturnType<typeof setTimeout> | null = null;
+  return function (...args: Parameters<T>): Promise<ReturnType<T>> {
+    return new Promise((resolve) => {
+      if (timeout) {
+        clearTimeout(timeout);
+      }
+      timeout = setTimeout(() => resolve(func(...args)), wait);
+    });
+  };
+}
 
 export default function SearchTicker() {
   const [value, setValue] = React.useState<TickerType | null>(null);
@@ -45,75 +45,65 @@ export default function SearchTicker() {
   );
 
   React.useEffect(() => {
-    let active = true;
-  
     if (inputValue === '') {
       setOptions(value ? [value] : []);
       return;
     }
-  
+
+    let active = true;
     const fetchResults = async () => {
       const results = await fetchTickersDebounced(inputValue);
       if (active) {
-        let newOptions: TickerType[] = [];
-  
-        if (value) {
-          newOptions = [value];
-        }
-  
-        if (results) {
-          newOptions = [...newOptions, ...results];
-        }
-  
-        setOptions(newOptions);
+        setOptions(value ? [value, ...results] : results);
       }
     };
-  
+
     fetchResults();
-  
+
     return () => {
       active = false;
     };
   }, [value, inputValue, fetchTickersDebounced]);
-  
 
   return (
-    <Autocomplete
-      id="search-ticker"
-      sx={{ width: 300 }}
-      getOptionLabel={(option: TickerType) => `${option.name} (${option.symbol})`}
-      filterOptions={(x) => x}
-      options={options}
-      autoComplete
-      includeInputInList
-      filterSelectedOptions
-      value={value}
-      noOptionsText="No tickers"
-      onChange={(event, newValue) => {
-        if (newValue) {
-          router.push(`/tickers/${newValue.symbol}`);
-        }
-      }}
-      onInputChange={(event, newInputValue) => {
-        if (event.type === 'change') {
-          setInputValue(newInputValue);
-        }
-      }}
-      renderInput={(params) => <TextField {...params} label="Search Company or Ticker" fullWidth />}
-      renderOption={(props, option) => (
-        <li {...props}>
-          <Grid container alignItems="center">
-            <Grid item xs>
-              <Typography variant="body1">
-                {option.name} ({option.symbol})
-              </Typography>
-              <Typography variant="body2" color="text.secondary">
-                {option.type}
-              </Typography>
+    <Box sx={{ flexGrow: 1 }}>
+      <Autocomplete
+        id="search-ticker"
+        sx={{ width: '100%', maxWidth: 400, marginX: 'auto' }}
+        getOptionLabel={(option: TickerType) => `${option.name} (${option.symbol})`}
+        filterOptions={(x) => x}
+        options={options}
+        autoComplete
+        includeInputInList
+        filterSelectedOptions
+        value={value}
+        noOptionsText="No tickers"
+        onChange={(event, newValue) => {
+          if (newValue) {
+            router.push(`/tickers/${newValue.symbol}`);
+          }
+        }}
+        onInputChange={(event, newInputValue) => {
+          if (event.type === 'change') {
+            setInputValue(newInputValue);
+          }
+        }}
+        renderInput={(params) => <TextField {...params} label="Search Company or Ticker" fullWidth />}
+        renderOption={(props, option) => (
+          <li {...props}>
+            <Grid container alignItems="center">
+              <Grid item xs>
+                <Typography variant="body1">
+                  {option.name} ({option.symbol})
+                  </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {option.type}
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-        </li>
-      )}
-    />
+          </li>
+        )}
+      />
+    </Box>
   );
 }

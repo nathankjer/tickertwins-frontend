@@ -1,7 +1,6 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { AppBar, Toolbar, Typography, Box, Link } from "@mui/material";
 import { styled } from "@mui/system";
-import SearchTicker from '../src/SearchTickers';
 
 const FlexBox = styled(Box)`
   display: flex;
@@ -10,7 +9,11 @@ const FlexBox = styled(Box)`
   width: 100%;
 `;
 
-export default function Navbar() {
+interface NavbarProps {
+  children: ReactNode;
+}
+
+export default function Navbar({ children }: NavbarProps) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" elevation={1} sx={{ bgcolor: "white", color: "black" }}>
@@ -21,7 +24,7 @@ export default function Navbar() {
                 TickerTwins
               </Typography>
             </Link>
-            <SearchTicker />
+            {children}
           </FlexBox>
         </Toolbar>
       </AppBar>
