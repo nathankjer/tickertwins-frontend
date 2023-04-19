@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel, CircularProgress, TablePagination } from '@mui/material';
+import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel } from '@mui/material';
+import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 
@@ -23,8 +24,6 @@ interface ApiResponse {
 export default function Symbol({ symbol }: SymbolProps) {
   const [data, setData] = useState<ApiResponse | null>(null);
   const [showETFs, setShowETFs] = useState(true);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
   const router = useRouter();
 
   useEffect(() => {
@@ -37,21 +36,12 @@ export default function Symbol({ symbol }: SymbolProps) {
   }, [symbol]);
 
   if (!data) {
-    return <div style={{ textAlign: 'center' }}><CircularProgress /></div>;
+    return <div>Loading...</div>;
   }
 
   const filteredSimilarTickers = showETFs
     ? data.similar_tickers
     : data.similar_tickers.filter(ticker => ticker.type !== 'ETF');
-
-  const handleChangePage = (event: unknown, newPage: number) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
 
   return (
     <>
@@ -61,26 +51,24 @@ export default function Symbol({ symbol }: SymbolProps) {
       <FormControlLabel
         control={<Checkbox checked={showETFs} onChange={e => setShowETFs(e.target.checked)} />}
         label="Show ETFs"
-        sx={{ float: 'right' }}
+        style={{ float: 'right' }}
       />
-      <TableContainer sx={{ maxHeight: '60vh', overflow: 'auto' }}>
+      <TableContainer style={{ maxHeight: '60vh', overflow: 'auto' }}> {/* Add fixed height and scrollable style */}
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell>
+              <TableCell>#</TableCell> {/* Add new column header for row number */}
               <TableCell>Symbol</TableCell>
               <TableCell>Name</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredSimilarTickers.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((ticker, index) => (
+            {filteredSimilarTickers.map((ticker, index) => (
               <TableRow key={ticker.symbol}>
-                <TableCell>{page * rowsPerPage + index + 1}</TableCell>
+                <TableCell>{index + 1}</TableCell> {/* Add new column for row number */}
                 <TableCell>
-                  <Link href={`/tickers/${ticker.symbol}`} passHref>
-                    <Typography component="a" sx={{ color: 'black', textDecoration: 'none' }}>
-                      {ticker.symbol}
-                    </Typography>
+                  <Link href={`/tickers/${ticker.symbol}`} style={{ color:"black" }} passHref>
+                    {ticker.symbol}
                   </Link>
                 </TableCell>
                 <TableCell>{ticker.name}</TableCell>
@@ -89,16 +77,11 @@ export default function Symbol({ symbol }: SymbolProps) {
           </TableBody>
         </Table>
       </TableContainer>
-      <TablePagination
-        rowsPerPageOptions={[10, 25, 50]}
-        component="div"
-        count={filteredSimilarTickers.length}
-        rowsPerPage={rowsPerPage}
-        page={page}
-        onPageChange={handleChangePage}
-        onRowsPerPageChange={handleChangeRowsPerPage}
-        sx={{ mt: 2 }}
-      />
     </>
   );
 }
+
+Symbol.getInitialProps = async ({ query }: NextPageContext): Promise<SymbolProps> => {
+  const symbol = query.symbol as string;
+  return { symbol };
+};
