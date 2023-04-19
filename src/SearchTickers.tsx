@@ -66,10 +66,10 @@ export default function SearchTicker() {
   }, [value, inputValue, fetchTickersDebounced]);
 
   return (
-    <Box sx={{ flexGrow: 1, borderRadius: '25px' }}>
+    <Box sx={{ flexGrow: 1 }}>
       <Autocomplete
         id="search-ticker"
-        sx={{ maxWidth: 400, marginX: 'auto', borderRadius: '25px' }}
+        sx={{ width: '100%', maxWidth: 400, marginX: 'auto' }}
         getOptionLabel={(option: TickerType) => `${option.name} (${option.symbol})`}
         filterOptions={(x) => x}
         options={options}
@@ -88,21 +88,14 @@ export default function SearchTicker() {
             setInputValue(newInputValue);
           }
         }}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label="Search Company or Ticker"
-            fullWidth
-            sx={{ borderRadius: '25px' }}
-          />
-        )}
+        renderInput={(params) => <TextField {...params} label="Search Company or Ticker" fullWidth />}
         renderOption={(props, option) => (
           <li {...props}>
             <Grid container alignItems="center">
               <Grid item xs>
                 <Typography variant="body1">
                   {option.name} ({option.symbol})
-                </Typography>
+                  </Typography>
                 <Typography variant="body2" color="text.secondary">
                   {option.type}
                 </Typography>
