@@ -61,10 +61,10 @@ export default function Symbol({ symbol }: SymbolProps) {
     <>
       <Typography variant="h4" component="h1">
         {data.ticker.name} ({data.ticker.symbol})
-      </Typography>
+      </Typography><br/>
       <Typography paragraph={true}>
         {data.ticker.description}
-      </Typography>
+      </Typography><br/>
       <Typography variant="h5" component="h2">
         Tickers with Similar Descriptions:
       </Typography>
