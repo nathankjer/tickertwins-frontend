@@ -25,7 +25,17 @@ export interface MyAppProps extends AppProps {
 
 const backgroundStyles: SxProps = {
   minHeight: '95vh',
-  backgroundImage: `url('../src/backgroundStyles.css')`,
+  background: `
+  background-color:#99f8ff;
+  background-image:
+  radial-gradient(at 9% 36%, hsla(62,93%,63%,1) 0px, transparent 50%),
+  radial-gradient(at 24% 85%, hsla(329,72%,73%,1) 0px, transparent 50%),
+  radial-gradient(at 71% 32%, hsla(162,78%,78%,1) 0px, transparent 50%),
+  radial-gradient(at 18% 61%, hsla(296,71%,60%,1) 0px, transparent 50%),
+  radial-gradient(at 59% 50%, hsla(182,81%,66%,1) 0px, transparent 50%),
+  radial-gradient(at 17% 28%, hsla(88,97%,70%,1) 0px, transparent 50%),
+  radial-gradient(at 19% 46%, hsla(260,84%,60%,1) 0px, transparent 50%);
+  `,
   display: 'flex',
   justifyContent: 'center',
 };
