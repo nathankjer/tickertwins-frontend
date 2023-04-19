@@ -5,6 +5,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { useRouter } from 'next/router'
+import { SxProps, Theme } from '@mui/system';
 
 interface TickerType {
   symbol: string;
@@ -30,7 +31,11 @@ function debounce<T extends (...args: any[]) => any>(func: T, wait: number): (..
   };
 }
 
-export default function SearchTicker() {
+interface SearchTickerProps {
+  sx?: SxProps<Theme>;
+}
+
+export default function SearchTicker({ sx }: SearchTickerProps) {
   const [value, setValue] = React.useState<TickerType | null>(null);
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<TickerType[]>([]);
@@ -66,7 +71,7 @@ export default function SearchTicker() {
   }, [value, inputValue, fetchTickersDebounced]);
 
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box sx={{ flexGrow: 1, ...sx }}>
       <Autocomplete
         id="search-ticker"
         sx={{ width: '100%', maxWidth: 400, marginX: 'auto' }}

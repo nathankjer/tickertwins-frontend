@@ -12,8 +12,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import { useRouter } from 'next/router';
-import SearchTicker from '../src/SearchTickers';
-import Hidden from '@mui/material/Hidden';
 import { SxProps } from '@mui/system';
 
 // Client-side cache, shared for the whole session of the user in the browser.
@@ -53,11 +51,7 @@ export default function MyApp(props: MyAppProps) {
       </Head>
       <ThemeProvider theme={theme}>
         <CssBaseline />
-        <Navbar>
-          <Hidden xsDown>
-            {!isHomePage && <SearchTicker />}
-          </Hidden>
-        </Navbar>
+        <Navbar />
         <Box sx={backgroundStyles}>
           <Container maxWidth="lg">
             <Box
