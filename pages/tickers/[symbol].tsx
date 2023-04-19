@@ -15,6 +15,7 @@ interface ApiResponse {
     symbol: string;
     name: string;
     type: string;
+    description: string;
   };
   similar_tickers: {
     symbol: string;
@@ -60,6 +61,12 @@ export default function Symbol({ symbol }: SymbolProps) {
     <>
       <Typography variant="h4" component="h1">
         {data.ticker.name} ({data.ticker.symbol})
+      </Typography>
+      <Typography paragraph={true}>
+        {data.ticker.description}
+      </Typography>
+      <Typography variant="h5" component="h2">
+        Tickers with Similar Descriptions:
       </Typography>
       <FormControlLabel
         control={<Checkbox checked={showETFs} onChange={e => setShowETFs(e.target.checked)} />}
