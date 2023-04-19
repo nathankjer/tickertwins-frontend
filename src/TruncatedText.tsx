@@ -20,12 +20,21 @@ const TruncatedText: React.FC<TruncatedTextProps> = ({ text, maxLength }) => {
     <>
       <Typography paragraph>
         {isTruncated ? truncatedText : text}
-        <Link href="#" onClick={handleToggleTruncated}>
-          {isTruncated ? ' Show more' : ' Show less'}
-        </Link>
+        {isTruncated ? (
+          <Link href="#" onClick={handleToggleTruncated}>
+            Show more
+          </Link>
+        ) : (
+          <>
+            <br />
+            <Link href="#" onClick={handleToggleTruncated}>
+              Show less
+            </Link>
+          </>
+        )}
       </Typography>
     </>
-  );
+  );  
 };
 
 export default TruncatedText;

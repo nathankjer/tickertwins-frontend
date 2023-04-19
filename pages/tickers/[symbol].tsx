@@ -63,7 +63,7 @@ export default function Symbol({ symbol }: SymbolProps) {
       <Typography variant="h4" component="h1">
         {data.ticker.name} ({data.ticker.symbol})
       </Typography><br/>
-      <TruncatedText text={data.ticker.description} maxLength={100} /><br/>
+      <TruncatedText text={data.ticker.description} maxLength={150} /><br/>
       <Typography variant="h5" component="h2">
         Tickers with similar descriptions
       </Typography>
