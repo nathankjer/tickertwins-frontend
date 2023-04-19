@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Typography, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, FormControlLabel } from '@mui/material';
+import { Box, TableFooter, TablePagination, MenuItem, Select } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material';
 import { NextPageContext } from 'next';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
@@ -43,6 +45,18 @@ export default function Symbol({ symbol }: SymbolProps) {
     ? data.similar_tickers
     : data.similar_tickers.filter(ticker => ticker.type !== 'ETF');
 
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const handleChangePage = (event: unknown, newPage: number) => {
+    setPage(newPage);
+  };
+  
+  const handleChangeRowsPerPage = (event: SelectChangeEvent<number>) => {
+    setRowsPerPage(Number(event.target.value));
+    setPage(0);
+  };  
+
   return (
     <>
       <Typography variant="h4" component="h1">
@@ -53,19 +67,21 @@ export default function Symbol({ symbol }: SymbolProps) {
         label="Show ETFs"
         style={{ float: 'right' }}
       />
-      <TableContainer style={{ maxHeight: '60vh', overflow: 'auto' }}> {/* Add fixed height and scrollable style */}
+      <TableContainer style={{ maxHeight: '60vh', overflow: 'auto' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>#</TableCell> {/* Add new column header for row number */}
+              <TableCell>#</TableCell>
               <TableCell>Symbol</TableCell>
               <TableCell>Name</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
-            {filteredSimilarTickers.map((ticker, index) => (
+            {filteredSimilarTickers
+              .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+              .map((ticker, index) => (
               <TableRow key={ticker.symbol}>
-                <TableCell>{index + 1}</TableCell> {/* Add new column for row number */}
+                <TableCell>{index + 1}</TableCell>
                 <TableCell>
                   <Link href={`/tickers/${ticker.symbol}`} style={{ color:"black" }} passHref>
                     {ticker.symbol}
@@ -77,6 +93,25 @@ export default function Symbol({ symbol }: SymbolProps) {
           </TableBody>
         </Table>
       </TableContainer>
+      <Box sx={{ display: 'flex', justifyContent: 'flex-end', p: 1 }}>
+        <Select
+          value={rowsPerPage}
+          onChange={handleChangeRowsPerPage}
+          sx={{ marginRight: 2 }}
+        >
+          <MenuItem value={10}>10</MenuItem>
+          <MenuItem value={25}>25</MenuItem>
+          <MenuItem value={50}>50</MenuItem>
+        </Select>
+        <TablePagination
+          rowsPerPageOptions={[]}
+          component="div"
+          count={filteredSimilarTickers.length}
+          rowsPerPage={rowsPerPage}
+          page={page}
+          onPageChange={handleChangePage}
+        />
+      </Box>
     </>
   );
 }
