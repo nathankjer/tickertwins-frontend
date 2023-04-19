@@ -72,43 +72,43 @@ export default function SearchTicker({ sx }: SearchTickerProps) {
 
   return (
     <Box sx={{ flexGrow: 1, ...sx }}>
-      <Autocomplete
-        id="search-ticker"
-        sx={{ width: '100%', maxWidth: 400, marginX: 'auto' }}
-        getOptionLabel={(option: TickerType) => `${option.name} (${option.symbol})`}
-        filterOptions={(x) => x}
-        options={options}
-        autoComplete
-        includeInputInList
-        filterSelectedOptions
-        value={value}
-        noOptionsText="No tickers"
-        onChange={(event, newValue) => {
-          if (newValue) {
-            router.push(`/tickers/${newValue.symbol}`);
-          }
-        }}
-        onInputChange={(event, newInputValue) => {
-          if (event.type === 'change') {
-            setInputValue(newInputValue);
-          }
-        }}
-        renderInput={(params) => <TextField {...params} label="Search Company or Ticker" fullWidth />}
-        renderOption={(props, option) => (
-          <li {...props}>
-            <Grid container alignItems="center">
-              <Grid item xs>
-                <Typography variant="body1">
-                  {option.name} ({option.symbol})
-                  </Typography>
-                <Typography variant="body2" color="text.secondary">
-                  {option.type}
-                </Typography>
-              </Grid>
+    <Autocomplete
+      id="search-ticker"
+      sx={{ width: '100%', maxWidth: 400, marginX: 'auto' }}
+      getOptionLabel={(option: TickerType) => `${option.name} (${option.symbol})`}
+      filterOptions={(x) => x}
+      options={options}
+      autoComplete
+      includeInputInList
+      filterSelectedOptions
+      value={value}
+      noOptionsText={inputValue ? 'No tickers' : ''}
+      onChange={(event, newValue) => {
+        if (newValue) {
+          router.push(`/tickers/${newValue.symbol}`);
+        }
+      }}
+      onInputChange={(event, newInputValue) => {
+        if (event.type === 'change') {
+          setInputValue(newInputValue);
+        }
+      }}
+      renderInput={(params) => <TextField {...params} label="Search Company or Ticker" fullWidth />}
+      renderOption={(props, option) => (
+        <li {...props}>
+          <Grid container alignItems="center">
+            <Grid item xs>
+              <Typography variant="body1">
+                {option.name} ({option.symbol})
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                {option.type}
+              </Typography>
             </Grid>
-          </li>
-        )}
-      />
+          </Grid>
+        </li>
+      )}
+    />
     </Box>
   );
 }
